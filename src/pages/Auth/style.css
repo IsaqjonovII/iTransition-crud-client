@@ -1,0 +1,13 @@
+.auth__container {
+  height: 100vh;
+  height: 100svh;
+  display: grid;
+  place-items: center;
+}
+.form__container  {
+    width: 100%;
+    max-width: 450px;
+}
+.auth__link {
+    text-align: center;
+}
