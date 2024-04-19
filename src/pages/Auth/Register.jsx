@@ -11,7 +11,7 @@ const Register = () => {
   const navigate = useNavigate();
 
   const onFinish = (values) => {
-    axios.post(`${BASE_URI}auth/register`, values).then(({ data }) => {
+    axios.post(`${BASE_URI}user/auth/register`, values).then(({ data }) => {
       if ("user" in data) {
         toast.success(data.message);
         sessionStorage.setItem("user", JSON.stringify(data.user));
