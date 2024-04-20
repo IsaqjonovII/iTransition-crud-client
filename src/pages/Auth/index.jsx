@@ -36,7 +36,7 @@ const Login = () => {
         >
           <Form.Item
             label="Email"
-            name="Email"
+            name="email"
             rules={[
               {
                 required: true,
