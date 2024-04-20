@@ -23,6 +23,26 @@ a {
   }
 }
 
+.icon {
+  vertical-align: middle;
+  width: 25px;
+  height: 25px;
+  object-fit: cover;
+}
+.ant-table-cell button {
+  width: auto;
+  display: inline;
+  margin: 0 5px;
+  padding: 0px 6px;
+  opacity: 0;
+}
+.ant-table-row:hover .ant-table-cell button {
+  opacity: 1;
+}
+.table__container {
+  margin: auto;
+  max-width: 1000px;
+}
 @media all and (width <= 768px){
   body {
     padding: 0 20px;
