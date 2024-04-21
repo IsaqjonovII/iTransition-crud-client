@@ -28,12 +28,23 @@ export function handleUserDelete(userId) {
         })
         .catch((err) => console.error(err));
 }
-export function changeUserStatus(userId) {
+export function blockUser(userId) {
+    axios.put(`${BASE_URI}user/block?id=${userId}`)
+        .then(({ data }) => {
+            customToast("ok", data.message);
+            location.reload();
+        })
+        .catch(err => console.log(err))
+}
+export function unBlockUser(userId) {
     axios.put(`${BASE_URI}user?id=${userId}`)
-        .then(({ data }) => console.log(data))
+        .then(({ data }) => {
+            customToast("ok", data.message)
+            location.reload();
+        })
         .catch(err => console.log(err))
 }
 
 export function handleUserActions(userId, actionType) {
-    actionType === "status" ? changeUserStatus(userId) : handleUserDelete(userId);
+    actionType === "block" ? blockUser(userId) : actionType === "unblock" ? unBlockUser(userId) : handleUserDelete(userId);
 }

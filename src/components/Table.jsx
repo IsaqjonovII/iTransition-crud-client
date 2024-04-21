@@ -1,10 +1,12 @@
 import { useState } from "react";
+import axios from "axios";
+import moment from "moment/moment";
 import { Button, Table, Tag } from "antd";
 import { array } from "prop-types";
 
-import { handleUserActions } from "utils";
+import { customToast, handleUserActions } from "utils";
 import { BlockIcon, TrashIcon, UnblockIcon } from "assets";
-import moment from "moment/moment";
+import { BASE_URI } from "constants";
 
 const columns = [
   {
@@ -18,12 +20,12 @@ const columns = [
   {
     title: "Registered at",
     dataIndex: "createdAt",
-    render: (time) => moment(time).format("DD MM YYYY, h:mm")
+    render: (time) => moment(time).format("DD MM YYYY, h:mm"),
   },
   {
     title: "Last Login at",
     dataIndex: "lastLogin",
-    render: (time) => moment(time).format("DD MM YYYY, h:mm")
+    render: (time) => moment(time).format("DD MM YYYY, h:mm"),
   },
   {
     title: "Status",
@@ -62,11 +64,11 @@ const CustomTable = ({ data }) => {
     user.actions = [
       {
         icon: BlockIcon,
-        type: "status",
+        type: "block",
       },
       {
         icon: UnblockIcon,
-        type: "status",
+        type: "unblock",
       },
       {
         icon: TrashIcon,
@@ -74,18 +76,47 @@ const CustomTable = ({ data }) => {
       },
     ];
   });
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedUsers, setSelectedRowKeys] = useState([]);
 
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
   const rowSelection = {
-    selectedRowKeys,
+    selectedRowKeys: selectedUsers,
     onChange: onSelectChange,
   };
 
+  function deleteAllSelected() {
+    selectedUsers.forEach((id) => {
+      axios
+        .delete(`${BASE_URI}user?id=${id}`)
+        .then(({ data }) => {
+          if (data.status === 404) {
+            customToast("no", data.message);
+          } else {
+            const { _id } = JSON.parse(sessionStorage.getItem("user"));
+            customToast("ok", data.message);
+            if (id === _id) {
+              sessionStorage.removeItem("user");
+              location.assign("/register");
+            }
+          }
+        })
+        .catch((err) => console.error(err));
+    });
+  }
+
   return (
     <div className="table__container">
+      {selectedUsers.length ? (
+        <button
+          className="table__actions"
+          onClick={deleteAllSelected}
+          style={{ padding: 5 }}
+        >
+          <img className="icon" src={TrashIcon} alt="" />
+        </button>
+      ) : null}
       <Table
         rowKey={(user) => user._id}
         rowSelection={rowSelection}
