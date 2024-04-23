@@ -4,7 +4,7 @@ import moment from "moment/moment";
 import { Button, Table, Tag } from "antd";
 import { array } from "prop-types";
 
-import { customToast, handleUserActions } from "utils";
+import { changeUsersStatus, customToast, handleUserActions } from "utils";
 import { BlockIcon, TrashIcon, UnblockIcon } from "assets";
 import { BASE_URI } from "constants";
 
@@ -109,13 +109,23 @@ const CustomTable = ({ data }) => {
   return (
     <div className="table__container">
       {selectedUsers.length ? (
-        <button
-          className="table__actions"
-          onClick={deleteAllSelected}
-          style={{ padding: 5 }}
-        >
-          <img className="icon" src={TrashIcon} alt="" />
-        </button>
+        <div className="table__actions__wrp">
+          <button
+            className="table__actions"
+            onClick={deleteAllSelected}>
+            <img className="icon" src={TrashIcon} alt="" />
+          </button>
+          <button
+            className="table__actions"
+            onClick={() => changeUsersStatus(selectedUsers.toString(), "unblock")}>
+            <img className="icon" src={UnblockIcon} alt="" />
+          </button>
+          <button
+            className="table__actions"
+            onClick={() => changeUsersStatus(selectedUsers.toString(), "block")}>
+            <img className="icon" src={BlockIcon} alt="" />
+          </button>
+        </div>
       ) : null}
       <Table
         rowKey={(user) => user._id}

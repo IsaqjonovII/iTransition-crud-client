@@ -48,3 +48,11 @@ export function unBlockUser(userId) {
 export function handleUserActions(userId, actionType) {
     actionType === "block" ? blockUser(userId) : actionType === "unblock" ? unBlockUser(userId) : handleUserDelete(userId);
 }
+export function changeUsersStatus(users, actionType) {
+    axios.put(`${BASE_URI}user/status-all?actionType=${actionType}&users=${users}`)
+        .then(({ data }) => {
+            customToast("ok", data.message)
+            location.reload();
+        })
+        .catch(err => console.log(err))
+}
